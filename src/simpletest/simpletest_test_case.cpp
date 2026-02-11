@@ -24,7 +24,8 @@ TestCase::Result TestCase::Run() const {
   return result;
 }
 
-void AddFailureLocation(TestCase::Result& result, FailureLocation loc) {
+void TestCase::Result::AddFailureLocation(TestCase::Result& result,
+                                          FailureLocation loc) {
   auto& failure_locations = GetGlobalFailureLocations();
   failure_locations.push_back(loc);
   if (result.first_failure_index_ == -1) {

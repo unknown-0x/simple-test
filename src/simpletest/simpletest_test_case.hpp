@@ -33,8 +33,10 @@ class SIMPLETEST_API TestCase {
       }
     }
 
+    SIMPLETEST_API static void AddFailureLocation(TestCase::Result& result,
+                                                  FailureLocation loc);
+
    private:
-    friend void AddFailureLocation(Result& result, FailureLocation loc);
     friend class TestCase;
 
     double test_time_ = 0.0;
@@ -52,8 +54,5 @@ class SIMPLETEST_API TestCase {
   const char* name_;
   Function func_;
 };
-
-SIMPLETEST_API void AddFailureLocation(TestCase::Result& result,
-                                       FailureLocation loc);
 }  // namespace simpletest
 #endif

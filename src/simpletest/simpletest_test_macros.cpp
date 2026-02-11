@@ -17,7 +17,7 @@ void CheckTrueImpl(TestCase::Result& result,
                    const char* file,
                    int line) {
   if (!value) {
-    AddFailureLocation(result, FailureLocation{file, line});
+    TestCase::Result::AddFailureLocation(result, FailureLocation{file, line});
   }
 }
 

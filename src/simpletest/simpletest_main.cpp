@@ -1,4 +1,4 @@
-#include "simpletest.hpp"
+#include "simpletest/simpletest.hpp"
 
 int main(int argc, char** argv) {
   (void)argc;

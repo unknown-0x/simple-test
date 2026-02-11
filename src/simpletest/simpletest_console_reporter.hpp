@@ -4,7 +4,7 @@
 #include "simpletest_reporter.hpp"
 
 namespace simpletest {
-class ConsoleReporter : public Reporter {
+class SIMPLETEST_API ConsoleReporter : public Reporter {
  public:
   ConsoleReporter();
   ~ConsoleReporter() = default;
