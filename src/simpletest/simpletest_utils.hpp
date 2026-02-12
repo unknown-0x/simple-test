@@ -54,9 +54,9 @@ class TextStream {
 
   TextStream& operator<<(bool value) {
     if (value) {
-      text.append("true", "4");
+      text.append("true", 4);
     } else {
-      text.append("false", "5");
+      text.append("false", 5);
     }
     return *this;
   }
