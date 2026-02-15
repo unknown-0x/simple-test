@@ -4,17 +4,17 @@
 #include "simpletest_reporter.hpp"
 
 namespace simpletest {
-class SIMPLETEST_API ConsoleReporter : public Reporter {
+class ConsoleReporter : public Reporter {
  public:
-  ConsoleReporter();
+  SIMPLETEST_API ConsoleReporter();
   ~ConsoleReporter() = default;
 
-  void OnTestSuiteStart(const TestSuite& test_suite) override;
-  void OnTestCaseStart(const TestCase& test_case) override;
-  void OnTestCaseEnd(const TestCase& test_case,
-                     const TestCase::Result& result) override;
-  void OnTestSuiteEnd(const TestSuite& test_suite) override;
-  void OnSummary(TestSummary summary) override;
+  SIMPLETEST_API void OnTestSuiteStart(const TestSuite& test_suite) override;
+  SIMPLETEST_API void OnTestCaseStart(const TestCase& test_case) override;
+  SIMPLETEST_API void OnTestCaseEnd(const TestCase& test_case,
+                                    const TestCase::Result& result) override;
+  SIMPLETEST_API void OnTestSuiteEnd(const TestSuite& test_suite) override;
+  SIMPLETEST_API void OnSummary(TestSummary summary) override;
 
  private:
   TextStream stream;

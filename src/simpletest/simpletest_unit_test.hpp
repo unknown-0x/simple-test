@@ -5,22 +5,22 @@
 
 namespace simpletest {
 class Reporter;
-class SIMPLETEST_API UnitTest {
+class UnitTest {
  public:
-  UnitTest();
+  SIMPLETEST_API UnitTest();
   UnitTest(const UnitTest&) = delete;
   UnitTest(UnitTest&&) = delete;
   UnitTest operator=(const UnitTest&) = delete;
   UnitTest operator=(UnitTest&&) = delete;
-  ~UnitTest();
+  SIMPLETEST_API ~UnitTest();
 
-  int RunAllTests() const;
+  SIMPLETEST_API int RunAllTests() const;
 
-  void SetReporter(Reporter* new_reporter);
+  SIMPLETEST_API void SetReporter(Reporter* new_reporter);
 
-  TestSuite& GetOrAddTestSuite(const char* suite_name);
+  SIMPLETEST_API TestSuite& GetOrAddTestSuite(const char* suite_name);
 
-  static UnitTest& Get();
+  SIMPLETEST_API static UnitTest& Get();
 
  private:
   std::vector<TestSuite> suites_;

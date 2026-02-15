@@ -4,12 +4,13 @@
 #include "simpletest_test_case.hpp"
 
 namespace simpletest {
-class SIMPLETEST_API TestSuite {
+class TestSuite {
  public:
-  TestSuite(const char* name);
+  SIMPLETEST_API TestSuite(const char* name);
   ~TestSuite() = default;
 
-  TestCase& AddTestCase(const char* name, TestCase::Function func);
+  SIMPLETEST_API TestCase& AddTestCase(const char* name,
+                                       TestCase::Function func);
 
   const std::vector<TestCase>& GetTestCases() const { return test_cases_; }
   const char* GetName() const { return name_; }
