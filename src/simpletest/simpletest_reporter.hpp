@@ -5,7 +5,7 @@
 #include "simpletest_utils.hpp"
 
 namespace simpletest {
-class Reporter {
+class SIMPLETEST_API Reporter {
  public:
   virtual ~Reporter() = default;
 
