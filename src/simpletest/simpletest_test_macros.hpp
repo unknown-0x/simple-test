@@ -53,6 +53,8 @@ SIMPLETEST_API TestCase& RegisterTestCase(const char* suite_name,
 
 #define SIMPLETEST_RESULT_NAME __test_case_result__
 
+#define IGNORE_RESULT() (void)SIMPLETEST_RESULT_NAME
+
 #define TEST_CASE(suite_name, test_case_name)                             \
   void Test##suite_name##test_case_name(::simpletest::TestCase::Result&); \
   static ::simpletest::TestCase& TestCase##suite_name##test_case_name =   \
