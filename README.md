@@ -143,6 +143,11 @@ TEST_CASE(String, Comparision_Char32) {
 
 SIMPLETEST_MAIN();
 ```
+
+### Output when running the test code in test/
+
+<img src="image.png" height="800" />
+
 ---
 
 ## Integration
