@@ -2,6 +2,7 @@
 #define SIMPLETEST_SIMPLETEST_TEST_MACROS_HPP_
 
 #include "simpletest_test_suite.hpp"
+#include "simpletest_unit_test.hpp"
 
 #include <cmath>
 #include <string_view>
@@ -9,27 +10,40 @@
 namespace simpletest {
 namespace internal {
 template <typename Fixture>
-void RunTestFixture(TestCase::Result& result) {
+void RunTestFixture() {
   Fixture fixture{};
-  fixture.Run(result);
+  fixture.Run();
 }
 
-SIMPLETEST_API void CheckTrueImpl(TestCase::Result& result,
-                                  bool value,
-                                  const char* file,
-                                  int line);
+inline void CheckTrueImpl(bool value, const char* file, int line) {
+  if (!value) {
+    TestCase::Result::AddFailureLocation(
+        UnitTest::Get().GetCurrentTestCase().GetResult(),
+        FailureLocation{file, line});
+  }
+}
 
-SIMPLETEST_API bool CheckStrEqImpl(std::string_view lhs, std::string_view rhs);
-SIMPLETEST_API bool CheckStrEqImpl(std::wstring_view lhs,
-                                   std::wstring_view rhs);
+inline bool CheckStrEqImpl(std::string_view lhs, std::string_view rhs) {
+  return lhs.compare(rhs) == 0;
+}
+
+inline bool CheckStrEqImpl(std::wstring_view lhs, std::wstring_view rhs) {
+  return lhs.compare(rhs) == 0;
+}
+
 #if defined(__cpp_char8_t)
-SIMPLETEST_API bool CheckStrEqImpl(std::u8string_view lhs,
-                                   std::u8string_view rhs);
+inline bool CheckStrEqImpl(std::u8string_view lhs, std::u8string_view rhs) {
+  return lhs.compare(rhs) == 0;
+}
 #endif
-SIMPLETEST_API bool CheckStrEqImpl(std::u16string_view lhs,
-                                   std::u16string_view rhs);
-SIMPLETEST_API bool CheckStrEqImpl(std::u32string_view lhs,
-                                   std::u32string_view rhs);
+
+inline bool CheckStrEqImpl(std::u16string_view lhs, std::u16string_view rhs) {
+  return lhs.compare(rhs) == 0;
+}
+
+inline bool CheckStrEqImpl(std::u32string_view lhs, std::u32string_view rhs) {
+  return lhs.compare(rhs) == 0;
+}
 
 template <typename Float>
 bool CheckNearImpl(Float lhs, Float rhs, Float epsilon) {
@@ -46,39 +60,36 @@ bool CheckNearImpl(Float lhs, Float rhs, Float epsilon) {
 }
 }  // namespace internal
 
-SIMPLETEST_API TestCase& RegisterTestCase(const char* suite_name,
-                                          const char* test_case_name,
-                                          TestCase::Function test_func);
+inline TestCase& RegisterTestCase(const char* suite_name,
+                                  const char* test_case_name,
+                                  TestCase::Function test_func) {
+  return UnitTest::Get()
+      .GetOrAddTestSuite(suite_name)
+      .AddTestCase(test_case_name, test_func);
+}
 }  // namespace simpletest
 
-#define SIMPLETEST_RESULT_NAME __test_case_result__
-
-#define IGNORE_RESULT() (void)SIMPLETEST_RESULT_NAME
-
-#define TEST_CASE(suite_name, test_case_name)                             \
-  void Test##suite_name##test_case_name(::simpletest::TestCase::Result&); \
-  static ::simpletest::TestCase& TestCase##suite_name##test_case_name =   \
-      ::simpletest::RegisterTestCase(#suite_name, #test_case_name,        \
-                                     Test##suite_name##test_case_name);   \
-  void Test##suite_name##test_case_name(                                  \
-      ::simpletest::TestCase::Result& SIMPLETEST_RESULT_NAME)
+#define TEST_CASE(suite_name, test_case_name)                           \
+  void Test##suite_name##test_case_name();                              \
+  static ::simpletest::TestCase& TestCase##suite_name##test_case_name = \
+      ::simpletest::RegisterTestCase(#suite_name, #test_case_name,      \
+                                     Test##suite_name##test_case_name); \
+  void Test##suite_name##test_case_name()
 
 #define TEST_FIXTURE(fixture_name, test_case_name)                        \
   class Fixture##fixture_name##test_case_name : public fixture_name {     \
    public:                                                                \
-    void Run(::simpletest::TestCase::Result&);                            \
+    void Run();                                                           \
   };                                                                      \
   static ::simpletest::TestCase& TestCase##fixture_name##test_case_name = \
       ::simpletest::RegisterTestCase(                                     \
           #fixture_name, #test_case_name,                                 \
           ::simpletest::internal::RunTestFixture<                         \
               Fixture##fixture_name##test_case_name>);                    \
-  void Fixture##fixture_name##test_case_name::Run(                        \
-      ::simpletest::TestCase::Result& SIMPLETEST_RESULT_NAME)
+  void Fixture##fixture_name##test_case_name::Run()
 
-#define CHECK_TRUE(...)                                                      \
-  ::simpletest::internal::CheckTrueImpl(SIMPLETEST_RESULT_NAME, __VA_ARGS__, \
-                                        __FILE__, __LINE__);
+#define CHECK_TRUE(...) \
+  ::simpletest::internal::CheckTrueImpl(__VA_ARGS__, __FILE__, __LINE__);
 #define CHECK_FALSE(...) CHECK_TRUE(!(__VA_ARGS__))
 
 #define CHECK_EQ(lhs, rhs) CHECK_TRUE(lhs == rhs)

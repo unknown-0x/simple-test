@@ -10,17 +10,20 @@ struct FailureLocation {
   int line;
 };
 
-SIMPLETEST_API std::vector<FailureLocation>& GetGlobalFailureLocations();
+inline std::vector<FailureLocation>& GetGlobalFailureLocations() {
+  static std::vector<FailureLocation> failure_locations{};
+  return failure_locations;
+}
 
-class SIMPLETEST_API TestCase {
+class TestCase {
  public:
   class Result {
    public:
     Result() = default;
 
-    bool IsPassed() const { return failure_count_ == 0; }
-    double GetTestTime() const { return test_time_; }
-    int GetFailureCount() const { return failure_count_; }
+    bool IsPassed() const noexcept { return failure_count_ == 0; }
+    double GetTestTime() const noexcept { return test_time_; }
+    int GetFailureCount() const noexcept { return failure_count_; }
 
     template <typename Fn>
     void ForEachFailureLocation(Fn&& fn) const {
@@ -33,8 +36,16 @@ class SIMPLETEST_API TestCase {
       }
     }
 
-    SIMPLETEST_API static void AddFailureLocation(TestCase::Result& result,
-                                                  FailureLocation loc);
+    static void AddFailureLocation(TestCase::Result& result,
+                                   FailureLocation loc) {
+      auto& failure_locations = GetGlobalFailureLocations();
+      failure_locations.push_back(loc);
+      if (result.first_failure_index_ == -1) {
+        result.first_failure_index_ =
+            static_cast<int>(failure_locations.size()) - 1;
+      }
+      ++result.failure_count_;
+    }
 
    private:
     friend class TestCase;
@@ -44,13 +55,26 @@ class SIMPLETEST_API TestCase {
     int failure_count_ = 0;
   };
 
-  using Function = void (*)(Result&);
+  using Function = void (*)();
 
-  TestCase(const char* name, Function func);
-  Result Run() const;
-  const char* GetName() const { return name_; }
+  TestCase(const char* name, Function func) : name_(name), func_(func) {}
+
+  void Run() {
+    using Clock = std::chrono::steady_clock;
+
+    auto start = Clock::now();
+    func_();
+    auto end = Clock::now();
+    result_.test_time_ =
+        std::chrono::duration<double, std::milli>(end - start).count();
+  }
+
+  const Result& GetResult() const noexcept { return result_; }
+  Result& GetResult() noexcept { return result_; }
+  const char* GetName() const noexcept { return name_; }
 
  private:
+  Result result_;
   const char* name_;
   Function func_;
 };
