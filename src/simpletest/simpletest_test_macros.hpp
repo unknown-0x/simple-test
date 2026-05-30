@@ -110,4 +110,11 @@ inline TestCase& RegisterTestCase(const char* suite_name,
 #define CHECK_NOT_NEAR(lhs, rhs, epsilon) \
   CHECK_TRUE(!::simpletest::internal::CheckNearImpl(lhs, rhs, epsilon))
 
+#define SIMPLETEST_MAIN()                             \
+  int main(int argc, char** argv) {                   \
+    (void)argc;                                       \
+    (void)argv;                                       \
+    return simpletest::UnitTest::Get().RunAllTests(); \
+  }
+
 #endif
