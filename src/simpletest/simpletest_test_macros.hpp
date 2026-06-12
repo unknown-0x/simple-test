@@ -113,27 +113,38 @@ inline TestCase& RegisterTestCase(const char* suite_name,
 #define SIMPLETEST_CONCAT_IMPL(x, y) x##y
 #define SIMPLETEST_CONCAT(x, y) SIMPLETEST_CONCAT_IMPL(x, y)
 
-#define CHECK_THROWS(...)                         \
-  do {                                            \
+#define CHECK_THROWS(...)                               \
+  do {                                                  \
     bool SIMPLETEST_CONCAT(__threw_, __LINE__) = false; \
-    try {                                         \
-      __VA_ARGS__;                                \
-    } catch (...) {                               \
+    try {                                               \
+      __VA_ARGS__;                                      \
+    } catch (...) {                                     \
       SIMPLETEST_CONCAT(__threw_, __LINE__) = true;     \
-    }                                             \
+    }                                                   \
     CHECK_TRUE(SIMPLETEST_CONCAT(__threw_, __LINE__));  \
   } while (false)
 
-#define CHECK_THROWS_AS(exception_type, ...)      \
-  do {                                            \
+#define CHECK_THROWS_AS(exception_type, ...)            \
+  do {                                                  \
     bool SIMPLETEST_CONCAT(__threw_, __LINE__) = false; \
-    try {                                         \
-      __VA_ARGS__;                                \
-    } catch (const exception_type&) {             \
+    try {                                               \
+      __VA_ARGS__;                                      \
+    } catch (const exception_type&) {                   \
       SIMPLETEST_CONCAT(__threw_, __LINE__) = true;     \
-    } catch (...) {                               \
-    }                                             \
+    } catch (...) {                                     \
+    }                                                   \
     CHECK_TRUE(SIMPLETEST_CONCAT(__threw_, __LINE__));  \
+  } while (false)
+
+#define CHECK_NOTHROW(...)                              \
+  do {                                                  \
+    bool SIMPLETEST_CONCAT(__threw_, __LINE__) = false; \
+    try {                                               \
+      __VA_ARGS__;                                      \
+    } catch (...) {                                     \
+      SIMPLETEST_CONCAT(__threw_, __LINE__) = true;     \
+    }                                                   \
+    CHECK_FALSE(SIMPLETEST_CONCAT(__threw_, __LINE__)); \
   } while (false)
 
 #define SIMPLETEST_MAIN()                             \
