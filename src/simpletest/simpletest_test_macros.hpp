@@ -115,25 +115,25 @@ inline TestCase& RegisterTestCase(const char* suite_name,
 
 #define CHECK_THROWS(...)                         \
   do {                                            \
-    bool AXIO_CONCAT(__threw_, __LINE__) = false; \
+    bool SIMPLETEST_CONCAT(__threw_, __LINE__) = false; \
     try {                                         \
       __VA_ARGS__;                                \
     } catch (...) {                               \
-      AXIO_CONCAT(__threw_, __LINE__) = true;     \
+      SIMPLETEST_CONCAT(__threw_, __LINE__) = true;     \
     }                                             \
-    CHECK_TRUE(AXIO_CONCAT(__threw_, __LINE__));  \
+    CHECK_TRUE(SIMPLETEST_CONCAT(__threw_, __LINE__));  \
   } while (false)
 
 #define CHECK_THROWS_AS(exception_type, ...)      \
   do {                                            \
-    bool AXIO_CONCAT(__threw_, __LINE__) = false; \
+    bool SIMPLETEST_CONCAT(__threw_, __LINE__) = false; \
     try {                                         \
       __VA_ARGS__;                                \
     } catch (const exception_type&) {             \
-      AXIO_CONCAT(__threw_, __LINE__) = true;     \
+      SIMPLETEST_CONCAT(__threw_, __LINE__) = true;     \
     } catch (...) {                               \
     }                                             \
-    CHECK_TRUE(AXIO_CONCAT(__threw_, __LINE__));  \
+    CHECK_TRUE(SIMPLETEST_CONCAT(__threw_, __LINE__));  \
   } while (false)
 
 #define SIMPLETEST_MAIN()                             \
