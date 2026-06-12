@@ -110,6 +110,32 @@ inline TestCase& RegisterTestCase(const char* suite_name,
 #define CHECK_NOT_NEAR(lhs, rhs, epsilon) \
   CHECK_TRUE(!::simpletest::internal::CheckNearImpl(lhs, rhs, epsilon))
 
+#define SIMPLETEST_CONCAT_IMPL(x, y) x##y
+#define SIMPLETEST_CONCAT(x, y) SIMPLETEST_CONCAT_IMPL(x, y)
+
+#define CHECK_THROWS(...)                        \
+  do {                                            \
+    bool AXIO_CONCAT(__threw_, __LINE__) = false; \
+    try {                                         \
+      __VA_ARGS__;                               \
+    } catch (...) {                               \
+      AXIO_CONCAT(__threw_, __LINE__) = true;     \
+    }                                             \
+    CHECK(AXIO_CONCAT(__threw_, __LINE__));       \
+  } while (false)
+
+#define CHECK_THROWS_AS(exception_type, ...)     \
+  do {                                            \
+    bool AXIO_CONCAT(__threw_, __LINE__) = false; \
+    try {                                         \
+      __VA_ARGS__;                               \
+    } catch (const exception_type&) {             \
+      AXIO_CONCAT(__threw_, __LINE__) = true;     \
+    } catch (...) {                               \
+    }                                             \
+    CHECK(AXIO_CONCAT(__threw_, __LINE__));       \
+  } while (false)
+
 #define SIMPLETEST_MAIN()                             \
   int main(int argc, char** argv) {                   \
     (void)argc;                                       \
