@@ -113,22 +113,22 @@ inline TestCase& RegisterTestCase(const char* suite_name,
 #define SIMPLETEST_CONCAT_IMPL(x, y) x##y
 #define SIMPLETEST_CONCAT(x, y) SIMPLETEST_CONCAT_IMPL(x, y)
 
-#define CHECK_THROWS(...)                        \
+#define CHECK_THROWS(...)                         \
   do {                                            \
     bool AXIO_CONCAT(__threw_, __LINE__) = false; \
     try {                                         \
-      __VA_ARGS__;                               \
+      __VA_ARGS__;                                \
     } catch (...) {                               \
       AXIO_CONCAT(__threw_, __LINE__) = true;     \
     }                                             \
     CHECK(AXIO_CONCAT(__threw_, __LINE__));       \
   } while (false)
 
-#define CHECK_THROWS_AS(exception_type, ...)     \
+#define CHECK_THROWS_AS(exception_type, ...)      \
   do {                                            \
     bool AXIO_CONCAT(__threw_, __LINE__) = false; \
     try {                                         \
-      __VA_ARGS__;                               \
+      __VA_ARGS__;                                \
     } catch (const exception_type&) {             \
       AXIO_CONCAT(__threw_, __LINE__) = true;     \
     } catch (...) {                               \
