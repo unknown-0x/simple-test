@@ -121,7 +121,7 @@ inline TestCase& RegisterTestCase(const char* suite_name,
     } catch (...) {                               \
       AXIO_CONCAT(__threw_, __LINE__) = true;     \
     }                                             \
-    CHECK(AXIO_CONCAT(__threw_, __LINE__));       \
+    CHECK_TRUE(AXIO_CONCAT(__threw_, __LINE__));  \
   } while (false)
 
 #define CHECK_THROWS_AS(exception_type, ...)      \
@@ -133,7 +133,7 @@ inline TestCase& RegisterTestCase(const char* suite_name,
       AXIO_CONCAT(__threw_, __LINE__) = true;     \
     } catch (...) {                               \
     }                                             \
-    CHECK(AXIO_CONCAT(__threw_, __LINE__));       \
+    CHECK_TRUE(AXIO_CONCAT(__threw_, __LINE__));  \
   } while (false)
 
 #define SIMPLETEST_MAIN()                             \
